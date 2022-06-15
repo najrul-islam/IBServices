@@ -1,0 +1,35 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.nav-active {
+    font-weight: bold;
+    border-bottom: 3px solid blue;
+}
+
+    .nav-active a {
+        color: blue !important;
+    }
+
+.navbar {
+    padding-bottom: 0 !important;
+}
+
+.navbar-brand {
+    padding-bottom: 0.5rem !important;
+}

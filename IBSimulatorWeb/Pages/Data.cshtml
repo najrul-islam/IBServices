@@ -1,0 +1,178 @@
+﻿@page
+@model IBSimulatorWeb.Pages.DataModel
+@{
+}
+<style>
+    form {
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        letter-spacing: 0.4px !important;
+        line-height: 2;
+        font-weight:bold;
+    }
+
+    .btn-info {
+        width: 130px;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    h3 {
+        border-bottom: 1px solid gray;
+        line-height: 2;
+        margin-bottom: 40px;
+        background-color: #f1f1f1;
+        padding-left: 20px;
+    }
+</style>
+
+<h3>Data</h3>
+<div>
+    <form method="post" class="col-md-8">
+
+        <div class="form-group">
+            <label for="data">Data Type</label>
+            <select class="form-control" onchange="onDataTypeChange()" id="data" name="data">
+                <option value="0">dg_heartbeat</option>
+                <option value="1">device_heartbeat</option>
+                <option value="2">rbe</option>
+                <option value="3">device_config_request</option>
+                <option value="10">dg_config_request</option>
+                <option value="11">vm_status</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="topic_name">Topic</label>
+            <input class="form-control" type="text" id="topic_name" name="topic_name" value="sg/sj/24k/willowglen/data/DG001" />
+        </div>
+        <div class="form-group">
+            <label for="payload">Payload</label>
+            <textarea class="form-control" name="payload" id="payload" rows="15" cols="50">
+{
+    "timestamp": "2022-05-23T23:11:37+08:00",
+    "data_type": 0,
+    "data": [
+        {
+           "dg_id": "DG001",
+           "heartbeat_datetime": "2022-05-23T23:11:37+08:00"
+        }
+    ]
+}
+          </textarea>
+        </div>
+        <input class="btn btn-info" type="submit" name="Send" value="Send" />
+    </form>
+</div>
+
+
+<script>
+    let dataTypes = [
+        {
+          "name": "dg_heartbeat",
+          "data_type": 0,
+          "payload": {
+            "timestamp": "2022-05-23T23:11:37+08:00",
+            "data_type": 0,
+            "data": [
+              {
+                "dg_id": "DG001",
+                "heartbeat_datetime": "2022-05-23T23:11:37+08:00"
+              }
+            ]
+          }
+        },
+        {
+          "name": "device_heartbeat",
+          "data_type": 1,
+          "payload": {
+            "timestamp": "2022-05-23T23:11:37+08:00",
+            "data_type": 1,
+            "data": [
+              {
+                "lmd_id": "S013RTU01",
+                "lmd-no": 1,
+                "heartbeat_datetime": "2022-05-23T23:11:37+08:00"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rbe",
+          "data_type": 2,
+          "payload": {
+            "timestamp": "2022-05-23T23:11:37+08:00",
+            "data_type": 2,
+            "data": [
+              {
+                "lmd_id": "S013RTU01",
+                "rbe_datetime": "2022-05-23T23:11:37+08:00",
+                "lmd-no": 1,
+                "rbelo": "0x0E0180805CE00000",
+                "rbehi": "0x0E0180805CE00000"
+              }
+            ]
+          }
+        },
+        {
+          "name": "device_config_request",
+          "data_type": 3,
+          "payload": {
+            "data_type": 3,
+            "timestamp": "2022-05-23T23:09:46+08:00",
+            "data": [
+              {
+                "lmd_id": "S013RTU01"
+              }
+            ]
+          }
+        },
+        {
+          "name": "dg_config_request",
+          "data_type": 10,
+          "payload": {
+            "data_type": 10,
+            "timestamp": "2022-05-23T23:09:46+08:00",
+            "data": [
+              {
+                "dg_id": "DG001",
+                "vm_id": "VM001"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vm_status",
+          "data_type": 11,
+          "payload": {
+            "data_type": 11,
+            "timestamp": "2022-05-23T23:09:46+08:00",
+            "data": [
+              {
+                "dg_id": "DG001",
+                "vm_id": "VM001",
+                "status": 0 // VM down  }  ]
+              }]
+            }
+        }
+    ];
+
+    function onDataTypeChange() {
+        let dataDropdownValue =  document.getElementById("data").value;
+        let payloadTextArea =  document.getElementById("payload");
+        let payloadTextAreaValue = payloadTextArea.value;
+        let selectedDataObj = dataTypes.find(obj => {
+             return obj.data_type == dataDropdownValue;
+        });
+
+        var textedJson = JSON.stringify(selectedDataObj.payload,undefined, 2);
+        payloadTextArea.innerHTML = textedJson;
+        console.log(JSON.stringify(selectedDataObj.payload, null, "\t"));
+      }
+</script>

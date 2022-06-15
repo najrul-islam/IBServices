@@ -1,0 +1,175 @@
+﻿@page
+@model IBSimulatorWeb.Pages.LastRBEModel
+@{
+}
+<style>
+    form {
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        letter-spacing: 0.4px !important;
+        line-height: 2;
+        font-weight: bold;
+    }
+
+    .btn-info {
+        width: 130px;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    h3 {
+        border-bottom: 1px solid gray;
+        line-height: 2;
+        margin-bottom: 40px;
+        background-color: #f1f1f1;
+        padding-left: 20px;
+    }
+
+    .rbe-section {
+        overflow: auto;
+    }
+
+    .bin-diff {
+        color: red;
+    }
+
+    .margin-bottom-none {
+        margin-bottom: 0px !important;
+    }
+</style>
+<h3 class="page-header">Last RBE</h3>
+<section class="mb-5">
+    <form asp-page-handler="FilterEquipment" id="FilterEquipment" method="post">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="buildings">Buildings: </label>
+                    <select class="form-select form-control select-input" id="buildings" name="buildings" onchange="onDropdownChange()">
+                        <option value="0">Select One</option>
+                        @foreach (var item in @Model._buildings)
+                        {
+                            if (item.ColBuildingId == Model.selectedBuildingId)
+                            {
+                                <option selected="selected" value="@item.ColBuildingId">
+                                    @item.ColBuildingId
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@item.ColBuildingId">
+                                    @item.ColBuildingId
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="rtus">Rtus: </label>
+                    <select class="form-select form-control select-input" id="rtus" name="rtus" onchange="onDropdownChange()">
+                        <option value="0">Select One</option>
+                        @foreach (var item in @Model._rtus)
+                        {
+                            if (item.ColRtuId == Model.selectedRtuId)
+                            {
+                                <option selected="selected" value="@item.ColRtuId">
+                                    @item.ColRtuId
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@item.ColRtuId">
+                                    @item.ColRtuId
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="equipments">Equipments: </label>
+                    <select class="form-select form-control select-input" id="equipments" name="equipments">
+                        <option value="0">Select One</option>
+                        @foreach (var item in @Model._equipments)
+                        {
+                            if (item.ColEquipmentId == Model.selectedEquipmentId)
+                            {
+                                <option selected="selected" value="@item.ColEquipmentId">
+                                    @item.ColEquipmentId
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@item.ColEquipmentId">
+                                    @item.ColEquipmentId
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="load">&nbsp;</label>
+                    <button class="btn btn-primary form-control" id="load" onclick="onDropdownChange()">Load</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+<section>
+    <div class="row rbe-section">
+        <div class="col-md-12">
+            @foreach (var item in @Model._selectedEquipments)
+            {
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group margin-bottom-none">
+                            <label for="rtuNo">RTU No: </label>
+                            @Html.Label(item.ColRtuNumber.ToString())
+                        </div>
+                        <div class="form-group margin-bottom-none margin-bottom-none">
+                            <label for="rbehex">Last RBE Hex: </label>
+                            @Html.Label($"{item?.ColLastRbelo ?? ""}{item?.ColLastRbehi?.Replace("0x", "") ?? ""}")
+                        </div>
+                        <div class="form-group margin-bottom-none">
+                            <label for="rbehex" class="bin-diff">Latest RBE Hex: </label>
+                            @Html.Label($"{item?.ColLatestRbelo ?? ""}{item?.ColLatestRbehi?.Replace("0x", "") ?? ""}")
+                        </div>
+                        <br /><br />
+                        <div class="form-group margin-bottom-none">
+                            <label for="rbebin">Last RBE BIN: </label>
+                            @Html.Label(@String.Join(String.Empty, ($"{item?.ColLastRbelo?.Replace("0x", "") ?? ""}{item?.ColLastRbehi?.Replace("0x", "") ?? ""}").Select(c => Convert.ToString(Convert.ToUInt32(c.ToString(), 16), 2).PadLeft(4, '0'))))
+                        </div>
+                        <div class="form-group margin-bottom-none">
+                            <label for="rbebin" class="bin-diff">Latest RBE BIN: </label>
+                            @Html.Label(@String.Join(String.Empty, ($"{item?.ColLatestRbelo?.Replace("0x", "") ?? ""}{item?.ColLatestRbehi?.Replace("0x", "") ?? ""}").Select(c => Convert.ToString(Convert.ToUInt32(c.ToString(), 16), 2).PadLeft(4, '0'))))
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="bindiff" class="bin-diff">RBE DIFF: </label>
+                            <textarea disabled="disabled" class="form-control" name="payload" id="payload" rows="15" cols="50">@Model.bitChangeListJson</textarea>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+    function onDropdownChange(){
+        console.log("change");
+        const form  = document.getElementById('FilterEquipment');
+        form.submit();
+    }
+</script>

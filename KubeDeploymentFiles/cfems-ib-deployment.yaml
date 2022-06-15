@@ -1,0 +1,268 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dg-healthmanager-deployment
+  labels:
+    app: dghealthmanager
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dghealthmanager
+  template:
+    metadata:
+      labels:
+        app: dghealthmanager
+    spec:
+      containers:
+      - name: dg-healthmanager
+        image: nazmuls3/cfems_dg_hm:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dg-healthmanager-service
+spec:
+  selector:
+    app: dghealthmanager
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-processor-deployment
+  labels:
+    app: configprocessor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: configprocessor
+  template:
+    metadata:
+      labels:
+        app: configprocessor
+    spec:
+      containers:
+      - name: config-processor
+        image: nazmuls3/cfems_config_processor:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-processor-service
+spec:
+  selector:
+    app: configprocessor
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-server-deployment
+  labels:
+    app: fileserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fileserver
+  template:
+    metadata:
+      labels:
+        app: fileserver
+    spec:
+      containers:
+      - name: file-server
+        image: nazmuls3/cfems_file_server:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-server-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: fileserver
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hbt-procssor-deployment
+  labels:
+    app: hbtprocssor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hbtprocssor
+  template:
+    metadata:
+      labels:
+        app: hbtprocssor
+    spec:
+      containers:
+      - name: hbt-procssor
+        image: nazmuls3/cfems_hbt_processor:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hbt-procssor-service
+spec:
+  selector:
+    app: hbtprocssor
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3002
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rbe-processor-deployment
+  labels:
+    app: rbeprocessor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rbeprocessor
+  template:
+    metadata:
+      labels:
+        app: rbeprocessor
+    spec:
+      containers:
+      - name: rbe-processor
+        image: nazmuls3/cfems_rbe_processor:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rbe-processor-service
+spec:
+  selector:
+    app: rbeprocessor
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schedule-manager-deployment
+  labels:
+    app: schedulemanager
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: schedulemanager
+  template:
+    metadata:
+      labels:
+        app: schedulemanager
+    spec:
+      containers:
+      - name: schedule-manager
+        image: nazmuls3/cfems_schedule_manager:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3004
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schedule-manager-service
+spec:
+  selector:
+    app: schedulemanager
+  ports:
+    - protocol: TCP
+      port: 3004
+      targetPort: 3004
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ib-simulator-deployment
+  labels:
+    app: ibsimulator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ibsimulator
+  template:
+    metadata:
+      labels:
+        app: ibsimulator
+    spec:
+      containers:
+      - name: ib-simulator
+        image: nazmuls3/cfems_simulator:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ib-simulator-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: ibsimulator
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443

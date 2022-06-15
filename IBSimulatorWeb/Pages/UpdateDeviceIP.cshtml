@@ -1,0 +1,105 @@
+﻿@page
+@model IBSimulatorWeb.Pages.UpdateDeviceIPModel
+@{
+    var rtus = @Model.rtus;
+    var updateDeviceIP = @Model._updateDeviceIP;
+}
+
+<style>
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        letter-spacing: 0.4px !important;
+        line-height: 2;
+        font-weight: bold;
+    }
+
+    .btn-info {
+        width: 130px;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    h3 {
+        border-bottom: 1px solid gray;
+        line-height: 2;
+        margin-bottom: 40px;
+        background-color: #f1f1f1;
+        padding-left: 20px;
+    }
+
+    table {
+        margin-bottom: 40px !important;
+    }
+
+    .payload-label {
+        padding: 0 10px 10px 0;
+    }
+
+    h5 {
+        font-size: 30px;
+        text-transform: uppercase;
+        font-weight: 300;
+        padding: 10px 0 10px 0;
+        text-align: center;
+        margin-bottom: 15px;
+        background-color: #bdffdb8c;
+    }
+
+    .btn-default {
+        border: 1px solid #000000;
+    }
+</style>
+
+<h3>UpdateDeviceIP</h3>
+<section>
+    <h5>RTU</h5>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>RTU Id</th>
+                        <th>IP Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in rtus)
+                    {
+                        <tr>
+                            <form asp-page-handler="UpdateDeviceIP" method="post">
+                            <td>@Html.Label(item.ColRtuId)</td>
+                            <td><input type="text" name="rtuNewIpAddress" value="@item.ColRtuIpAddress?.ToString()" /></td>
+                            <td>
+                                <button class="btn btn-default">Updat Device IP</button>
+                                <input type="hidden" name="rtuId" value="@item.ColRtuId" />
+                                <input type="hidden" name="newIp" value="@item.ColRtuIpAddress" />
+                            </td>
+                            </form>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="row payload-label">
+                    <label class="col-md-10" for="payload">Update Device IP Payload</label>
+                    <button class="btn btn-warning col-md-2" onclick="onClickClearBtn()">Clear</button>
+                </div>
+                <textarea class="form-control" name="payload" id="payload" rows="15" cols="50">@updateDeviceIP</textarea>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function onClickClearBtn(){
+        let txtArea = document.getElementById("payload");
+        txtArea.value = "";
+    }
+</script>

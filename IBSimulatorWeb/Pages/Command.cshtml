@@ -1,0 +1,284 @@
+﻿@page
+@model IBSimulatorWeb.Pages.CommandModel
+@{
+}
+
+<style>
+    form {
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        letter-spacing: 0.4px !important;
+        line-height: 2;
+        font-weight: bold;
+    }
+
+    .btn-info {
+        width: 150px;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    h3 {
+        border-bottom: 1px solid gray;
+        line-height: 2;
+        margin-bottom: 40px;
+        background-color: #f1f1f1;
+        padding-left: 20px;
+    }
+</style>
+<h3>Command</h3>
+<div>
+    <form method="post" class="col-md-8">
+        <div class="form-group">
+            <label for="command">Command Type</label>
+            <select class="form-control" onchange="onCommandTypeChange()" id="command" name="command">
+                @*<option value="0">ib_heartbeat  </option>*@
+                @*<option value="1">enable_disable_device</option>
+                    <option value="2">issue_test</option>
+                    <option value="3">set_mask_value</option>*@
+                <option value="4">set_day_night_flag</option>
+                @*<option value="5">request_lift_status</option>*@
+                @*<option value="8">send_device_config</option>*@
+                @*<option value="9">test_status_ack</option>*@
+                @*<option value="21">send_dg_config</option>*@
+                @*<option value="22">update_dg_config</option>*@
+                @*<option value="23">update_device_ip</option>*@
+                @*<option value="24">debug_on_off</option>*@
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="topic_name">Topic Type</label>
+            <input class="form-control" type="text" id="topic_name" name="topic_name" value="sg/sj/24k/willowglen/cmd/DG001" />
+        </div>
+        <div class="form-group">
+            <label for="payload">Payload</label>
+            <textarea class="form-control" name="payload" id="payload" rows="15" cols="50">
+{
+    "timestamp": "2022-05-23T23:11:37+08:00",
+    "target_list": [ "S013RTU01", "S013RTU02" ],
+    "commands": [
+    {
+        "command_type": 4,
+        "command_name": "set_day_night_flag",
+        "parameters": {
+        "flag": 0
+        }
+    }
+    ]
+}
+</textarea>
+        </div>
+        <input type="submit" class="btn btn-info" name="Send" value="Send Command" />
+    </form>
+</div>
+
+
+<script>
+    let commandTypes = [
+        {
+            "name": "ib_heartbeat",
+            "command_type": 0,
+            "payload": {
+              "timestamp": "2022-05-23T23:11:37+08:00",
+              "asset_class": "default",
+              "target_list": [],
+              "commands": [
+                {
+                  "command_type": 0,
+                  "command_name": "ib_heartbeat",
+                  "parameters": {}
+                }
+              ]
+            }
+        },
+        {
+            "name": "set_day_night_flag",
+            "command_type": 4,
+            "payload": {
+              "timestamp": "2022-05-23T23:11:37+08:00",
+              "target_list": [ "S013RTU01", "S013RTU02" ],
+              "commands": [
+                {
+                  "command_type": 4,
+                  "command_name": "set_day_night_flag",
+                  "parameters": {
+                    "flag": 0
+                  }
+                }
+              ]
+            }
+        },
+        {
+            "name": "request_lift_status",
+            "command_type": 5,
+            "payload": {
+              "timestamp": "2022-05-23T23:11:37+08:00",
+              "target_list": [ "S013RTU01", "S013RTU02" ], // or just tag value "all" for all LMDs under DG
+              "commands": [
+                {
+                  "command_type": 5,
+                  "command_name": "request_lift_status",
+                  "parameters": {}
+                }
+              ]
+            }
+        },
+        {
+            "name": "send_device_config",
+            "command_type": 8,
+            "payload": {
+                "timestamp": "2022-05-23T23:11:37+08:00",
+                "target_list": [ "S013RTU01" ],
+                "commands": [
+                {
+                    "command_type": 8,
+                    "command_name": "send_device_config",
+                    "parameters": {
+                    "day_night_flag": 0,
+                    "last_rbe": [
+                        {
+                        "1": "0x0E0180805CE000000E0180805CE00000"
+                        },
+                        {
+                        "2": "0x0E0180805CE000000E0180805CE00000"
+                        },
+                        {
+                        "7": "0x0E0180805CE00000"
+                        }
+                    ]
+                    }
+                }
+                ]
+            }
+        },
+        {
+            "name": "send_dg_config",
+            "command_type": 21,
+            "payload": {
+                "timestamp": "2022-05-23T23:11:37+08:00",
+                "target_list": [ "DG001" ],
+                "commands": [
+                {
+                    "command_type": 21,
+                    "command_name": "send_dg_config",
+                    "parameters": {
+                    "file_hash": "abc-aaad-dae"
+                    }
+                }
+                ]
+            }
+        },
+        {
+            "name": "update_dg_config",
+            "command_type": 22,
+            "payload": {
+                "timestamp": "2022-05-23T23:11:37+08:00",
+                "target_list": [ "DG001" ],
+                "commands": [
+                {
+                    "command_type": 22,
+                    "command_name": "update_dg_config",
+                    "parameters": {
+                    "remove_list": [ "S013RTU01", "S013RTU04" ],
+                    "add_list": [
+                        {
+                        "lmd": {
+                            "lmd_id": "S013RTU01",
+                            "ipaddress": "192.167.0.12"
+                        },
+                        "devices": [
+                            {
+                            "type": "digital",
+                            "baudrate": 2400,
+                            "rbelo": "0x0E0180805CE00000",
+                            "rbehi": "0x0E0180805CE00000",
+                            "lmd_no": 1
+                            },
+                            {
+                            "type": "lift",
+                            "baudrate": 2400,
+                            "lmd_no": 7,
+                            "rbelo": "0x0E0180805CE00000"
+                            }
+                        ]
+                        },
+                        {
+                        "lmd": {
+                            "lmd_id": "S013RTU02",
+                            "ipaddress": "192.167.0.13"
+                        },
+                        "devices": [
+                            {
+                            "type": "analog",
+                            "baudrate": 2400,
+                            "rbelo": "0x0E0180805CE00000",
+                            "rbehi": "0x0E0180805CE00000",
+                            "lmd_no": 3
+                            },
+                            {
+                            "type": "escalator",
+                            "baudrate": 2400,
+                            "lmd_no": 13,
+                            "rbelo": "0x0E0180805CE00000"
+                            }
+                        ]
+                        }
+                    ]
+                    }
+                }
+                ]
+            }
+        },
+        {
+            "name": "update_device_ip",
+            "command_type": 23,
+            "payload": {
+                "timestamp": "2022-05-23T23:11:37+08:00",
+                "target_list": [ "S013RTU01" ],
+                "commands": [
+                {
+                    "command_type": 23,
+                    "command_name": "update_device_ip",
+                    "parameters": {
+                    "new_ip": "192.168.0.1"
+                    }
+                }
+                ]
+            }
+        },
+        {
+            "name": "debug_on_off",
+            "command_type": 24,
+            "payload": {
+                "timestamp": "2022-05-23T23:11:37+08:00",
+                "target_list": [ "DG001" ],
+                "commands": [
+                {
+                    "command_type": 24,
+                    "command_name": "debug_on_off",
+                    "parameters": { "flag": "on" }
+                }
+                ]
+            }
+        }
+    ];
+    function onCommandTypeChange() {
+        let cmdDropdownValue =  document.getElementById("command").value;
+        let payloadTextArea =  document.getElementById("payload");
+        let payloadTextAreaValue = payloadTextArea.value;
+        let selectedCmdObj = commandTypes.find(obj => {
+             return obj.command_type == cmdDropdownValue;
+        });
+
+        var textedJson = JSON.stringify(selectedCmdObj.payload,undefined, 2);
+        payloadTextArea.innerHTML = textedJson;
+        console.log(JSON.stringify(selectedCmdObj.payload, null, "\t"));
+      }
+</script>

@@ -1,0 +1,20 @@
+docker build -f CPDockerfile -t nazmuls3/cfems_config_processor:v1.0.0 .   
+docker push nazmuls3/cfems_config_processor:v1.0.0
+
+docker build -f DGHMDockerfile -t nazmuls3/cfems_dg_hm:v1.0.0 .
+docker push nazmuls3/cfems_dg_hm:v1.0.0
+
+docker build -f FSDockerfile -t nazmuls3/cfems_file_server:v1.0.0 .
+docker push nazmuls3/cfems_file_server:v1.0.0
+
+docker build -f HBTDockerfile -t nazmuls3/cfems_hbt_processor:v1.0.0 .
+docker push nazmuls3/cfems_hbt_processor:v1.0.0
+
+docker build -f RBEDockerfile -t nazmuls3/cfems_rbe_processor:v1.0.0 .
+docker push nazmuls3/cfems_rbe_processor:v1.0.0
+
+docker build -f SMDockerfile -t nazmuls3/cfems_schedule_manager:v1.0.0 .
+docker push nazmuls3/cfems_schedule_manager:v1.0.0
+
+docker build -f SimulatorDockerfile -t nazmuls3/cfems_simulator:v1.0.0 .
+docker push nazmuls3/cfems_simulator:v1.0.0

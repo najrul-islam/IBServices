@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+
+ #hbtprocessor:
+ #   image: s3innovate/s3ib-hbtprocessor:dg-dev
+ #   build:
+ #     context: .
+ #     dockerfile: HBTProcessor/Dockerfile
+
+   mqbridge:
+    image: s3innovate/s3ib-mqbridge:dg-dev
+    build:
+      context: .
+      dockerfile: MQBridge/Dockerfile
+
+
+
+
